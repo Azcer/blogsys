@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title>CSDN技术博客</title>
+	<script type="text/javascript" src="{{url_for('static', filename='bootstrap5/bootstrap.min.js')}}"></script>
+	<script type="text/javascript" src="{{url_for('static', filename='bootstrap5/popper.min.js')}}"></script>
+	<link rel="stylesheet" type="text/css" href="{{url_for('static',filename='bootstrap5/bootstrap.min.css')}}">
+	<link rel="stylesheet" type="text/css" href="{{url_for('static',filename='css/base.css')}}">
+	<link rel="stylesheet" type="text/css" href="{{url_for('static',filename='wangeditor/style.css')}}">
+	<script type="text/javascript" src="{{url_for('static',filename='wangeditor/index.js')}}"></script>
+	<style type="text/css">
+		#editor—wrapper {
+			border: 1px solid #ccc;
+			z-index: 100;
+			/* 按需定义 */
+		}
+
+		#toolbar-container {
+			border-bottom: 1px solid #ccc;
+		}
+
+		#editor-container {
+			height: 500px;
+		}
+	</style>
+</head>
+
+<body>
+	<header class="p-3 text-bg-light border-bottom mb-3">
+		<div class="container">
+			<div class="d-flex flex-wrap align-items-center justify-content-center justify-content-lg-start">
+				<a href="/" class="d-flex align-items-center mb-2 mb-lg-0 text-white text-decoration-none">
+					<img src="{{url_for('static',filename='images/logo.png')}}" height="40">
+				</a>
+
+				<ul class="nav col-12 col-lg-auto me-lg-auto mb-2 justify-content-center mb-md-0">
+					<li><a href="{{url_for('qa.index')}}" class="nav-link px-2 text-secondary">首页</a></li>
+					<<li><a href="{{url_for('qa.public_question')}}" class="nav-link px-2 text-secondary">发布博客</a></li>
+				</ul>
+
+				<form class="col-12 col-lg-auto mb-3 mb-lg-0 me-lg-3" role="search" method="get"
+					action="{{url_for('qa.search')}}">
+					<input type="search" class="form-control" placeholder="Search..." aria-label="Search" name="q">
+				</form>
+
+				<div class="text-end">
+					{% if user %}
+					<span class="btn btn-outline-primary me-2">{{user.username}}</span>
+					<a type="button" class="btn btn-primary" href="{{url_for('auth.logout')}}">退出登录</a>
+					{% else %}
+					<a type="button" class="btn btn-outline-primary me-2" href="{{url_for('auth.login')}}">登录</a>
+					<a type="button" class="btn btn-primary" href="{{url_for('auth.register')}}">注册</a>
+					{% endif %}
+				</div>
+			</div>
+		</div>
+	</header>
+
+	<main class='container p-4 rounded bg-white'>
+		<h1>发布博客</h1>
+		<div class="mt-2">
+			<form method="post">
+				<div class="mb-3">
+					<label class="form-label">标题</label>
+					<input type="text" name="title" placeholder="请输入标题" class="form-control">
+				</div>
+				<div class="mb-3">
+					<label class="form-label">内容</label>
+					<div id="editor—wrapper">
+						<textarea name="content" id="form_content"></textarea>
+					</div>
+				</div>
+				<div class="mb-3 text-end">
+					<input type="submit" class="btn btn-primary" value="提交">
+				</div>
+			</form>
+		</div>
+	</main>
+	<script type="text/javascript">
+		const { createEditor, createToolbar } = window.wangEditor
+
+		const editorConfig = {
+			placeholder: '请输入...',
+			onChange(editor) {
+				const html = editor.getHtml()
+				console.log('editor content', html)
+				// 也可以同步到 <textarea>
+			}
+		}
+
+		const editor = createEditor({
+			selector: '#editor-container',
+			html: '<p><br></p>',
+			config: editorConfig,
+			mode: 'default', // or 'simple'
+		})
+
+		const toolbarConfig = {}
+
+		const toolbar = createToolbar({
+			editor,
+			selector: '#toolbar-container',
+			config: toolbarConfig,
+			mode: 'default', // or 'simple'
+		})
+	</script>
+</body>
+
+</html>

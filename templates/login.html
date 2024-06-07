@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>CSDN技术博客</title>
+  <script type="text/javascript" src="{{url_for('static', filename='bootstrap5/bootstrap.min.js')}}"></script>
+  <script type="text/javascript" src="{{url_for('static', filename='bootstrap5/popper.min.js')}}"></script>
+  <link rel="stylesheet" type="text/css" href="{{url_for('static',filename='bootstrap5/bootstrap.min.css')}}">
+  <link rel="stylesheet" type="text/css" href="{{url_for('static',filename='css/base.css')}}">
+  <link rel="stylesheet" type="text/css" href="{{url_for('static',filename='css/auth.css')}}">
+</head>
+
+<body>
+  <header class="p-3 text-bg-light border-bottom mb-3">
+    <div class="container">
+      <div class="d-flex flex-wrap align-items-center justify-content-center justify-content-lg-start">
+        <a href="/" class="d-flex align-items-center mb-2 mb-lg-0 text-white text-decoration-none">
+          <img src="{{url_for('static',filename='images/logo.png')}}" height="40">
+        </a>
+
+        <ul class="nav col-12 col-lg-auto me-lg-auto mb-2 justify-content-center mb-md-0">
+          <li><a href="{{url_for('qa.index')}}" class="nav-link px-2 text-secondary">首页</a></li>
+          <li><a href="{{url_for('qa.public_question')}}" class="nav-link px-2 text-secondary">发布博客</a></li>
+        </ul>
+
+        <form class="col-12 col-lg-auto mb-3 mb-lg-0 me-lg-3" role="search" method="get"
+          action="{{url_for('qa.search')}}">
+          <input type="search" class="form-control" placeholder="Search..." aria-label="Search" name="q">
+        </form>
+
+        <div class="text-end">
+          {% if user %}
+          <span class="btn btn-outline-primary me-2">{{user.username}}</span>
+          <a type="button" class="btn btn-primary" href="{{url_for('auth.logout')}}">退出登录</a>
+          {% else %}
+          <a type="button" class="btn btn-outline-primary me-2" href="{{url_for('auth.login')}}">登录</a>
+          <a type="button" class="btn btn-primary" href="{{url_for('auth.register')}}">注册</a>
+          {% endif %}
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main class='container p-4 rounded bg-white'>
+    <div class="mt-3 form-auth m-auto">
+      <h1>请登录</h1>
+      <form class="mt-3" method="post">
+        <div class="mb-3">
+          <label class="form-label">邮箱</label>
+          <input type="email" name="email" placeholder="请输入邮箱" class='form-control'>
+        </div>
+        <div class="mb-3">
+          <label class="form-label">密码</label>
+          <input type="password" name="password" placeholder="请输入密码" class='form-control'>
+        </div>
+        <div class="form-check mb-3">
+          <input class="form-check-input" type="checkbox" name='remember' value="" id="flexCheckDefault">
+          <label class="form-check-label" for="flexCheckDefault">
+            记住我
+          </label>
+        </div>
+        <div class='mb-3'>
+          <button class='btn btn-primary w-100'>登录</button>
+        </div>
+      </form>
+    </div>
+  </main>
+</body>
+
+</html>

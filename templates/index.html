@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>博客首页</title>
+  <script type="text/javascript" src="{{url_for('static', filename='bootstrap5/bootstrap.min.js')}}"></script>
+  <script type="text/javascript" src="{{url_for('static', filename='bootstrap5/popper.min.js')}}"></script>
+  <link rel="stylesheet" type="text/css" href="{{url_for('static',filename='bootstrap5/bootstrap.min.css')}}">
+  <link rel="stylesheet" type="text/css" href="{{url_for('static',filename='css/base.css')}}">
+</head>
+
+<body>
+  <header class="p-3 text-bg-light border-bottom mb-3">
+    <div class="container">
+      <div class="d-flex flex-wrap align-items-center justify-content-center justify-content-lg-start">
+        <a href="/" class="d-flex align-items-center mb-2 mb-lg-0 text-white text-decoration-none">
+          <img src="{{url_for('static',filename='images/logo.png')}}" height="60">
+        </a>
+
+        <ul class="nav col-12 col-lg-auto me-lg-auto mb-2 justify-content-center mb-md-0">
+          <li><a href="{{url_for('qa.index')}}" class="nav-link px-2 text-secondary">首页</a></li>
+          <li><a href="{{url_for('qa.public_question')}}" class="nav-link px-2 text-secondary">发布博客</a></li>
+        </ul>
+
+        <form class="col-12 col-lg-auto mb-3 mb-lg-0 me-lg-3" role="search" method="get"
+          action="{{url_for('qa.search')}}">
+          <input type="search" class="form-control" placeholder="Search..." aria-label="Search" name="q">
+        </form>
+
+        <div class="text-end">
+          {% if user %}
+          <span class="btn btn-outline-primary me-2">{{user.username}}</span>
+          <a type="button" class="btn btn-primary" href="{{url_for('auth.logout')}}">退出登录</a>
+          {% else %}
+          <a type="button" class="btn btn-outline-primary me-2" href="{{url_for('auth.login')}}">登录</a>
+          <a type="button" class="btn btn-primary" href="{{url_for('auth.register')}}">注册</a>
+          {% endif %}
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main class='container p-4 rounded bg-white'>
+    <h1>博客列表</h1>
+    <div class="row row-gap-4 row-cols-2">
+      <div class="col">
+        <div class="card">
+          <ul style="list-style: none;">
+            {% for question in questions %}
+            <li>
+              <div class="card-header">
+                <a href="{{url_for('qa.qa_detail',qa_id=question.id)}}">{{question.title}}</a>
+              </div>
+              <div class="card-body">
+                <p class="card-text" style="height: 80px;">{{question.content}}</p>
+              </div>
+              <div class="card-footer text-body-secondary d-inline-flex justify-content-between">
+                <div>
+                  <img src="{{url_for('static',filename='images/avatar.webp')}}" class="rounded-circle me-2" width="30"
+                    height="30">
+                  {{question.author.username}}
+                </div>
+                <div>
+                  发布时间：{{question.create_time}}
+                </div>
+              </div>
+            </li>
+            <br>
+            {% endfor %}
+          </ul>
+        </div>
+      </div>
+    </div>
+  </main>
+</body>
+
+</html>
